@@ -3,7 +3,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Left, Body, Right } from 'native-base';
+import { Container, H1, H2, Header, Content, Card, CardItem, Thumbnail, Text, Button, Left, Body, Right } from 'native-base';
 
 const styles = {
   imageText: {
@@ -27,13 +27,18 @@ const styles = {
 
 export default Home = () => {
   return (
-  <Content >
-    <View style={styles.container}> 
-      <Card>
-        <CardItem>
-        </CardItem>
-      </Card>
-    </View>
-</Content>
+    <Container>
+      <Header/>
+      <Content >
+        <H1>The Wedding Of</H1>
+        <Card>
+          <Image 
+            style={{height: 300, width: null, flex: 1}}
+            source={require('../components/homepicture.jpg')} />
+        </Card>
+        <H1>Mr & Mrs Austin Crane</H1>
+        <H2>September 16 2017</H2>
+      </Content>
+    </Container>
  );
 }

@@ -3,14 +3,19 @@ import {
   View,
   Image,
 } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Body } from 'native-base';
+import { Container, Right, Left, Button, Header, Content, Card, CardItem, Text, Body } from 'native-base';
+import { StackNavigator } from 'react-navigation';
 
 import { getAllPosts } from '../api';
+import PostCreatePage from './PostCreatePage';
 
-export default class PostPage extends Component {
+export class PostListPage extends Component {
   state = {
     posts: [],
   };
+  static navigationOptions = {
+ }
+
   componentDidMount() {
     // get the post data
     getAllPosts().then((response) => {
@@ -42,7 +47,6 @@ export default class PostPage extends Component {
     let posts = this.getPostCards();
     if (posts.length === 0)
       posts = <Text>No Posts</Text>;
-    console.log(posts);
     return (
       <Container>
         <Content>
@@ -54,3 +58,22 @@ export default class PostPage extends Component {
    );
   }
 }
+
+PostListPage.navigationOptions = ({ navigation }) => {
+  return {
+    title: 'Posts',
+    headerRight: (
+      <Button transparent onPress={() => navigation.navigate('PostCreatePage')}>
+        <Text>+</Text>
+      </Button>
+    )
+  };
+};
+export default PostPage = StackNavigator({
+  PostListPage: {
+    screen: PostListPage,
+  },
+  PostCreatePage: {
+    screen: PostCreatePage,
+  }
+});
