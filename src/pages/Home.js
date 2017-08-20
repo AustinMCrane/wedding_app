@@ -3,7 +3,9 @@ import {
   View,
   Image,
 } from 'react-native';
-import { Container, H1, H2, Header, Content, Card, CardItem, Thumbnail, Text, Button, Left, Body, Right } from 'native-base';
+import { Container, H1, Title, H2, Header, Content, Card, CardItem, Thumbnail, Text, Button, Left, Body, Right } from 'native-base';
+
+import { getAllTimelines } from '../api';
 
 const styles = {
   imageText: {
@@ -11,7 +13,10 @@ const styles = {
     textAlign: 'center',
     paddingBottom: 10,
     fontSize: 20,
- },
+  },
+  centerText: {
+    textAlign: 'center',
+  },
   imageContent: {
     flex: 1,
     flexDirection: 'column',
@@ -25,20 +30,72 @@ const styles = {
   }
 };
 
-export default Home = () => {
-  return (
-    <Container>
-      <Header/>
-      <Content >
-        <H1>The Wedding Of</H1>
-        <Card>
-          <Image 
-            style={{height: 300, width: null, flex: 1}}
-            source={require('../components/homepicture.jpg')} />
+export default class Home extends Component {
+  state = {
+    timelines: [],
+  };
+  getTimelines() {
+    getAllTimelines().then((response) => {
+      console.log(response);
+      this.setState({ timelines: response.data.list });
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  componentDidMount() {
+    this.getTimelines();
+  }
+
+  renderTimeline() {
+    return this.state.timelines.map((item) => {
+      return (
+        <Card key={ item.id }>
+          <CardItem>
+            <Text>{ item.time }</Text>
+          </CardItem>
+          <CardItem>
+            <Body>
+              <Text>{ item.body }</Text>
+            </Body>
+          </CardItem>
         </Card>
-        <H1>Mr & Mrs Austin Crane</H1>
-        <H2>September 16 2017</H2>
-      </Content>
-    </Container>
- );
+      );
+    });
+  }
+
+  render() {
+    return (
+      <Container>
+        <Header>
+          <Body>
+            <Title>Bulletin</Title>
+          </Body>
+        </Header>
+        <Content >
+          <Card>
+            <Image 
+              style={{height: 300, width: null, flex: 1}}
+              source={require('../homepicture.png')} />
+          </Card>
+          <View>
+            {this.state.timelines.length > 0 &&
+              this.renderTimeline()
+            }
+          </View>
+        </Content>
+      </Container>
+   );
+  }
+}
+
+Home.navigationOptions = () => {
+  return {
+    tabBarIcon: ({ tintColor }) => (
+      <Image
+        source={require('../heart.png')}
+        style={[styles.icon, {tintColor: tintColor}]}
+      />
+    )
+  };
 }

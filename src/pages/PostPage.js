@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Image,
+  RefreshControl,
 } from 'react-native';
 import { Container, Right, Left, Button, Header, Content, Card, CardItem, Text, Body } from 'native-base';
 import { StackNavigator } from 'react-navigation';
@@ -9,18 +10,24 @@ import { StackNavigator } from 'react-navigation';
 import { getAllPosts } from '../api';
 import PostCreatePage from './PostCreatePage';
 
+const styles = {};
 export class PostListPage extends Component {
   state = {
     posts: [],
+    refreshing: false,
   };
-  static navigationOptions = {
- }
 
-  componentDidMount() {
+  getAllPosts() {
     // get the post data
     getAllPosts().then((response) => {
       this.setState({ posts: response.data.list });
+    }).catch((err) => {
+      console.log(err.response);
     });
+  }
+
+  componentDidMount() {
+    this.getAllPosts();
   }
 
   getPostCards() {
@@ -49,7 +56,11 @@ export class PostListPage extends Component {
       posts = <Text>No Posts</Text>;
     return (
       <Container>
-        <Content>
+        <Content refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.getAllPosts.bind(this)} />
+          }>
           <View>
             { posts }
           </View>
@@ -64,11 +75,20 @@ PostListPage.navigationOptions = ({ navigation }) => {
     title: 'Posts',
     headerRight: (
       <Button transparent onPress={() => navigation.navigate('PostCreatePage')}>
-        <Text>+</Text>
+        <Image source={require('../write.png')} />
       </Button>
-    )
+    ),
+    tabBarIcon: ({ tintColor }) => {
+      return (
+        <Image
+          source={require('../photo.png')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      );
+    }
   };
 };
+
 export default PostPage = StackNavigator({
   PostListPage: {
     screen: PostListPage,

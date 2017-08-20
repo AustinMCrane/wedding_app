@@ -1,10 +1,19 @@
 import axios from 'axios';
 
 const baseURL = 'http://wedding.austinmcrane.me:8080/api/v1';
+//const baseURL = 'http://localhost:8888/api/v1';
+
 
 const getAllPosts = () => {
   const url = `${baseURL}/posts`;
-  console.log(url);
+  return axios({
+    method: 'get',
+    url,
+  });
+};
+
+const getAllTimelines = () => {
+  const url = `${baseURL}/timelines`;
   return axios({
     method: 'get',
     url,
@@ -42,4 +51,5 @@ export {
   createPost,
   rsvpUser,
   getAllLocations,
+  getAllTimelines,
 };

@@ -8,7 +8,6 @@ import { TabNavigator } from 'react-navigation';
 import Home from './pages/Home';
 import MapPage from './pages/MapPage';
 import PostPage from './pages/PostPage';
-import RSVPPage from './pages/RSVPPage';
 
 export default App = TabNavigator({
   Home: {
@@ -20,7 +19,4 @@ export default App = TabNavigator({
   Post: {
     screen: PostPage,
   },
-  RSVP: {
-    screen: RSVPPage
-  }
 });
